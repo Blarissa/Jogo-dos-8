@@ -15,8 +15,7 @@ def retorna_passos(solucao):
         for passo in solucao:
             for linha in passo:
                 print(linha)
-            print("----")
-
+            print("{:-^13}".format(""))
 
 retorna_passos(solucao)
 root.mainloop()
