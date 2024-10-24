@@ -79,19 +79,31 @@ class App:
 
                 # Cria um botão vazio para representar o espaço vazio
                 else:
-                    self.blocos[i][j] = tk.Button(
-                        self.root,
-                        text="",
-                        bg=COR,
-                        fg="white",
-                        font=FONTE,
-                        width=8,
-                        height=2,
-                    )
-                    self.blocos[i][j].grid(row=i, column=j)
+                    self.botao_num(i, j, None)
 
         # Criar botões para reiniciar, sair e resolver o jogo
-        self.blocos[3][0] = tk.Button(
+        self.botao_reiniciar()
+        self.botao_sair()
+        self.botao_resolver()
+
+        self.atualiza_quadro()
+
+    def botao_num(self, i, j, num):
+        texto = "" if num is None else str(num)
+        
+        self.blocos[i][j] = tk.Button(
+                    self.root,
+                    text=texto,
+                    bg=COR,
+                    fg="white",
+                    font=FONTE,
+                    width=8,
+                    height=2,
+                )
+        self.blocos[i][j].grid(row=i, column=j)
+
+    def botao_resolver(self):
+        self.blocos[3][2] = tk.Button(
             self.root,
             text="Resolver",
             bg=COR,
