@@ -58,3 +58,11 @@ class bfs:
                     fila.append((vizinho, caminho + [vizinho]))
 
         return
+
+    def retorna_passos(self, caminho):
+        for i in range(len(caminho)):
+            print(f"Passo {i + 1}:")
+            for linha in caminho[i]:
+                print(linha)
+            print('{:-<13}'.format(''))
+    
