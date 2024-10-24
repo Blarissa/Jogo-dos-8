@@ -5,7 +5,6 @@ from random import shuffle
 FONTE = ("Arial", 24)
 COR = "#4682B4"
 
-
 class App:
     def __init__(self, root):
         self.root = root
@@ -76,20 +75,22 @@ class App:
                 num = self.quadro[i][j]
                 # Cria um botão para cada peça do jogo
                 if num is not None:
-                    self.blocos[i][j] = tk.Button(
-                        self.root,
-                        text=str(num),
-                        bg=COR,
-                        fg="white",
-                        font=FONTE,
-                        width=8,
-                        height=2,
-                    )
-                    self.blocos[i][j].grid(row=i, column=j)
+                    self.botao_num(i, j, num)
 
                 # Cria um botão vazio para representar o espaço vazio
                 else:
-                    self.blocos[i][j] = tk.Button(
+                    self.botao_num(i, j, None)
+                    #self.botao_none(i, j)
+
+        # Criar botões para reiniciar, sair e resolver o jogo
+        self.botao_reiniciar()
+        self.botao_sair()
+        self.botao_resolver()
+
+        self.atualiza_quadro()
+
+    def botao_none(self, i, j):
+        self.blocos[i][j] = tk.Button(
                         self.root,
                         text="",
                         bg=COR,
@@ -98,35 +99,24 @@ class App:
                         width=8,
                         height=2,
                     )
-                    self.blocos[i][j].grid(row=i, column=j)
+        self.blocos[i][j].grid(row=i, column=j)
 
-        # Criar botões para reiniciar, sair e resolver o jogo
-        self.blocos[3][0] = tk.Button(
-            self.root,
-            text="Reiniciar",
-            bg=COR,
-            fg="white",
-            font=FONTE,
-            width=8,
-            height=2,
-            command=self.reiniciar,
-        )
+    def botao_num(self, i, j, num):
+        texto = "" if num is None else str(num)
+        
+        
+        self.blocos[i][j] = tk.Button(
+                    self.root,
+                    text=texto,
+                    bg=COR,
+                    fg="white",
+                    font=FONTE,
+                    width=8,
+                    height=2,
+                )
+        self.blocos[i][j].grid(row=i, column=j)
 
-        self.blocos[3][0].grid(row=3, column=0)
-
-        self.blocos[3][1] = tk.Button(
-            self.root,
-            text="Sair",
-            bg=COR,
-            fg="white",
-            font=FONTE,
-            width=8,
-            height=2,
-            command=self.root.quit,
-        )
-
-        self.blocos[3][1].grid(row=3, column=1)
-
+    def botao_resolver(self):
         self.blocos[3][2] = tk.Button(
             self.root,
             text="Resolver",
@@ -140,4 +130,30 @@ class App:
 
         self.blocos[3][2].grid(row=3, column=2)
 
-        self.atualiza_quadro()
+    def botao_sair(self):
+        self.blocos[3][1] = tk.Button(
+            self.root,
+            text="Sair",
+            bg=COR,
+            fg="white",
+            font=FONTE,
+            width=8,
+            height=2,
+            command=self.root.quit,
+        )
+
+        self.blocos[3][1].grid(row=3, column=1)
+
+    def botao_reiniciar(self):
+        self.blocos[3][0] = tk.Button(
+            self.root,
+            text="Reiniciar",
+            bg=COR,
+            fg="white",
+            font=FONTE,
+            width=8,
+            height=2,
+            command=self.reiniciar,
+        )
+
+        self.blocos[3][0].grid(row=3, column=0)
