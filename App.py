@@ -5,25 +5,34 @@ from random import shuffle
 FONTE = ("Arial", 24)
 COR = "#4682B4"
 
+
 class App:
     def __init__(self, root):
         self.root = root
         self.root.title("Jogo dos 8")
 
-        # Cria uma matriz de botões para representar as peças do jogo
+        # Cria uma matriz de botões para representar as peças do jogo e o espaço vazio
         self.blocos = [[None for _ in range(3)] for _ in range(4)]
-        self.empty_pos = (2, 2)  # Posição inicial do espaço vazio
 
         # Cria os valores das peças
         numeros = list(range(1, 9)) + [None]
         shuffle(numeros)  # Embaralha os números
 
         self.quadro = [numeros[i : i + 3] for i in range(0, 9, 3)]
+
+        self.empty_pos = self.retorna_empty_pos()
+
         self.cria_quadro()
-        
+
         # Quando um botão é clicado, move a peça para o espaço vazio
         self.evento()
-        
+
+    def retorna_empty_pos(self):
+        for i in range(3):
+            for j in range(3):
+                if self.quadro[i][j] == None:
+                    return i, j
+
     # Reinicia o jogo
     def reiniciar(self):
         numeros = list(range(1, 9)) + [None]
@@ -31,10 +40,10 @@ class App:
         self.quadro = [numeros[i : i + 3] for i in range(0, 9, 3)]
         self.empty_pos = (2, 2)
         self.atualiza_quadro()
-        
+
+    # Resolve o jogo
     def resolver(self):
-        grafo = [[2, 3, 5], [4, 1, 8], [7, 6, None]]
-        bfs = BFS.bfs(grafo)
+        bfs = BFS.bfs(self.quadro)
         solucao = bfs.caminho
         bfs.retorna_passos(solucao)
 
@@ -50,7 +59,7 @@ class App:
         for i in range(3):
             for j in range(3):
                 self.blocos[i][j].config(command=lambda i=i, j=j: self.move(i, j))
-                
+
     # Move a peça para o espaço vazio
     def move(self, i, j):
         x, y = self.empty_pos
@@ -74,10 +83,10 @@ class App:
                         fg="white",
                         font=FONTE,
                         width=8,
-                        height=2
+                        height=2,
                     )
                     self.blocos[i][j].grid(row=i, column=j)
-                    
+
                 # Cria um botão vazio para representar o espaço vazio
                 else:
                     self.blocos[i][j] = tk.Button(
@@ -87,10 +96,10 @@ class App:
                         fg="white",
                         font=FONTE,
                         width=8,
-                        height=2
+                        height=2,
                     )
                     self.blocos[i][j].grid(row=i, column=j)
-        
+
         # Criar botões para reiniciar, sair e resolver o jogo
         self.blocos[3][0] = tk.Button(
             self.root,
@@ -100,11 +109,11 @@ class App:
             font=FONTE,
             width=8,
             height=2,
-            command=self.reiniciar
+            command=self.reiniciar,
         )
-        
+
         self.blocos[3][0].grid(row=3, column=0)
-        
+
         self.blocos[3][1] = tk.Button(
             self.root,
             text="Sair",
@@ -113,11 +122,11 @@ class App:
             font=FONTE,
             width=8,
             height=2,
-            command=self.root.quit
+            command=self.root.quit,
         )
-        
+
         self.blocos[3][1].grid(row=3, column=1)
-    
+
         self.blocos[3][2] = tk.Button(
             self.root,
             text="Resolver",
@@ -126,9 +135,9 @@ class App:
             font=FONTE,
             width=8,
             height=2,
-            command=self.resolver
+            command=self.resolver,
         )
-        
+
         self.blocos[3][2].grid(row=3, column=2)
-        
+
         self.atualiza_quadro()
