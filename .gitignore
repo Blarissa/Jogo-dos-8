@@ -1,0 +1,42 @@
+
+# Arquivos e diretórios de ambiente virtual
+venv/
+.env
+*.env
+
+# Arquivos de configuração do editor
+*.vscode/
+*.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos compilados
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+*.out
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Bibliotecas instaladas via pip
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+
+# Arquivos de banco de dados local
+*.sqlite3
+*.db
+
+# Arquivos do Jupyter Notebook
+.ipynb_checkpoints/
+    
