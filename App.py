@@ -1,4 +1,5 @@
 import tkinter as tk
+import BFS
 from random import shuffle
 
 FONTE = ("Arial", 24)
@@ -10,7 +11,7 @@ class App:
         self.root.title("Jogo dos 8")
 
         # Cria uma matriz de botões para representar as peças do jogo
-        self.blocos = [[None for _ in range(3)] for _ in range(3)]
+        self.blocos = [[None for _ in range(3)] for _ in range(4)]
         self.empty_pos = (2, 2)  # Posição inicial do espaço vazio
 
         # Cria os valores das peças
@@ -22,7 +23,29 @@ class App:
         
         # Quando um botão é clicado, move a peça para o espaço vazio
         self.evento()
+        
+    # Reinicia o jogo
+    def reiniciar(self):
+        numeros = list(range(1, 9)) + [None]
+        shuffle(numeros)
+        self.quadro = [numeros[i : i + 3] for i in range(0, 9, 3)]
+        self.empty_pos = (2, 2)
+        self.atualiza_quadro()
+        
+    def resolver(self):
+        grafo = [[2, 3, 5], [4, 1, 8], [7, 6, None]]
+        bfs = BFS.bfs(grafo)
+        solucao = bfs.caminho
+        bfs.retorna_passos(solucao)
 
+    # Atualiza o quadro do jogo
+    def atualiza_quadro(self):
+        for i in range(3):
+            for j in range(3):
+                num = self.quadro[i][j]
+                self.blocos[i][j].config(text=str(num) if num is not None else "")
+
+    # Adiciona o evento de clique para cada botão
     def evento(self):
         for i in range(3):
             for j in range(3):
@@ -33,7 +56,6 @@ class App:
         x, y = self.empty_pos
         # Verifica se a peça clicada é adjacente ao espaço vazio
         if (i == x and abs(j - y) == 1) or (j == y and abs(i - x) == 1):
-            # Troca a peça clicada com o espaço vazio
             self.quadro[x][y], self.quadro[i][j] = self.quadro[i][j], self.quadro[x][y]
             self.empty_pos = (i, j)
             self.atualiza_quadro()
@@ -51,8 +73,8 @@ class App:
                         bg=COR,
                         fg="white",
                         font=FONTE,
-                        width=5,
-                        height=2,
+                        width=8,
+                        height=2
                     )
                     self.blocos[i][j].grid(row=i, column=j)
                     
@@ -64,18 +86,49 @@ class App:
                         bg=COR,
                         fg="white",
                         font=FONTE,
-                        width=5,
+                        width=8,
                         height=2
                     )
                     self.blocos[i][j].grid(row=i, column=j)
+        
+        # Criar botões para reiniciar, sair e resolver o jogo
+        self.blocos[3][0] = tk.Button(
+            self.root,
+            text="Reiniciar",
+            bg=COR,
+            fg="white",
+            font=FONTE,
+            width=8,
+            height=2,
+            command=self.reiniciar
+        )
+        
+        self.blocos[3][0].grid(row=3, column=0)
+        
+        self.blocos[3][1] = tk.Button(
+            self.root,
+            text="Sair",
+            bg=COR,
+            fg="white",
+            font=FONTE,
+            width=8,
+            height=2,
+            command=self.root.quit
+        )
+        
+        self.blocos[3][1].grid(row=3, column=1)
+    
+        self.blocos[3][2] = tk.Button(
+            self.root,
+            text="Resolver",
+            bg=COR,
+            fg="white",
+            font=FONTE,
+            width=8,
+            height=2,
+            command=self.resolver
+        )
+        
+        self.blocos[3][2].grid(row=3, column=2)
+        
         self.atualiza_quadro()
-
-    # Atualiza o quadro do jogo
-    def atualiza_quadro(self):
-        for i in range(3):
-            for j in range(3):
-                num = self.quadro[i][j]
-                if num is not None:
-                    self.blocos[i][j].config(text=str(num), state=tk.NORMAL)
-                else:
-                    self.blocos[i][j].config(text="", state=tk.NORMAL)
