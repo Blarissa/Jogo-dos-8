@@ -19,6 +19,24 @@ class App:
 
         self.quadro = [numeros[i : i + 3] for i in range(0, 9, 3)]
         self.cria_quadro()
+        
+        # Quando um botão é clicado, move a peça para o espaço vazio
+        self.evento()
+
+    def evento(self):
+        for i in range(3):
+            for j in range(3):
+                self.blocos[i][j].config(command=lambda i=i, j=j: self.move(i, j))
+                
+    # Move a peça para o espaço vazio
+    def move(self, i, j):
+        x, y = self.empty_pos
+        # Verifica se a peça clicada é adjacente ao espaço vazio
+        if (i == x and abs(j - y) == 1) or (j == y and abs(i - x) == 1):
+            # Troca a peça clicada com o espaço vazio
+            self.quadro[x][y], self.quadro[i][j] = self.quadro[i][j], self.quadro[x][y]
+            self.empty_pos = (i, j)
+            self.atualiza_quadro()
 
     # Cria o quadro do jogo
     def cria_quadro(self):
@@ -44,10 +62,10 @@ class App:
                         self.root,
                         text="",
                         bg=COR,
+                        fg="white",
                         font=FONTE,
                         width=5,
-                        height=2,
-                        state=tk.DISABLED,
+                        height=2
                     )
                     self.blocos[i][j].grid(row=i, column=j)
         self.atualiza_quadro()
@@ -60,4 +78,4 @@ class App:
                 if num is not None:
                     self.blocos[i][j].config(text=str(num), state=tk.NORMAL)
                 else:
-                    self.blocos[i][j].config(text="", state=tk.DISABLED)
+                    self.blocos[i][j].config(text="", state=tk.NORMAL)
